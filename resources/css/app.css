@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: 'Roboto';
+    src: url('/public/fonts/Roboto/Roboto-Regular.ttf') format('woff2');
+}
+  
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 400px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background-color: #f3f6f4;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: #07b0ff; 
+    border-radius: 10px;
+  }
+
+  .trix-content {
+    width: 100%;
+  }
+
+  .trix-content h1 {
+      font-size: 2rem !important;
+      line-height: 1.25rem !important;
+      margin-bottom: 1.5rem;
+      margin-top: 1.5rem;
+      font-weight: 600;
+  }
+  .trix-content{
+    font-size: 1.1rem;
+  }
+  
+  .trix-content a:not(.no-underline) {
+      text-decoration: underline;
+  }
+  
+  .trix-content a:visited {
+      color: #07e3ff;
+  }
+  
+  .trix-content ul {
+      list-style-type: disc;
+      padding-left: 1rem;
+  }
+  
+  .trix-content ol {
+      list-style-type: decimal;
+      padding-left: 1rem;
+  }
+  
+  .trix-content pre {
+      display: inline-block;
+      width: 100%;
+      vertical-align: top;
+      font-family: monospace;
+      font-size: 1.5em;
+      padding: 0.5em;
+      white-space: pre;
+      background-color: #eee;
+      overflow-x: auto;
+  }
+  
+  .trix-content blockquote {
+      border: 0 solid #ccc;
+      border-left-width: 0.3em;
+      margin-left: 0.3em;
+      padding-left: 0.6em;
+      font-style: italic;
+  }
+.trix-content figure.attachment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.trix-content figure.attachment img {
+  display: block;
+  max-width: 70%;
+  height: 400px;
+  margin: 4px 0px 0px 0px;
+}
+
+@media (max-width:640px){
+  .trix-content figure.attachment img {
+    display: block;
+    max-width: 90%;
+    height: 270px;
+    margin: 4px 0px 0px 0px;
+  }
+}
+
+.trix-content figure.attachment a{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.trix-content figure.attachment figcaption.attachment__caption {
+  padding: 3px;
+  width: 80%;
+  font-style: italic; /* Định dạng tùy ý cho chú thích */
+  color: #666;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.trix-content figure.attachment figcaption.attachment__caption textarea.attachment__caption-editor{
+  overflow: hidden;
+  border: none;
+  box-shadow: none;
+}
+
+.trix-content .trix-button-row{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.trix-button-row{
+  overflow: hidden !important;  
+  flex-wrap: wrap !important;
+}
+
+trix-toolbar .trix-button-group{
+  border:none !important;
+}
+
+
+.trix-button{
+  background-color: white !important;
+  border:none !important;
+}
+
+    /* @media (prefers-color-scheme: dark) {
+      *::-webkit-scrollbar-track {
+        background-color: #374151; 
+      }
+    
+      *::-webkit-scrollbar-thumb {
+        background-color: #6b7280;
+    }
+  } */
