@@ -20,6 +20,7 @@ new class extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->avatar = Auth::user()->avatar;
     }
 
     public function updatedAvatar($value)
@@ -130,7 +131,7 @@ new class extends Component
                     <img src="{{ $avatarPreview ? $avatarPreview : asset('storage/'.auth()->user()->avatar)}}" alt="Ảnh đại diện" class="w-14 h-14 rounded-full mb-3">
                 </div>
                 <div class="flex justify-center">
-                    <x-input-label for="avatar" class='inline-flex items-center px-4 py-2 w-auto h-8 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white tracking-widest hover:bg-green-700 focus:bg-green-800 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150'>
+                    <x-input-label for="avatar" class='inline-flex items-center px-4 py-2 w-auto h-8 bg-mainColor1 border border-transparent rounded-md font-semibold text-xs text-white tracking-widest hover:bg-green-700 focus:bg-green-800 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150'>
                         <svg wire:loading wire:target="avatar" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

@@ -1,7 +1,7 @@
-<div x-show="openChatList" class="h-full w-full md:w-1/3 xl:w-1/4 overflow-hidden ml-0 sm:p-8 md:p-0 md:ml-5 border-x border-gray-300">
+<div x-show="openChatList" class="h-full w-full md:w-1/3 xl:w-1/4 overflow-hidden ml-0 sm:p-8 md:p-0 md:ml-5 border-x border-gray-300 relative">
     <form class="flex items-center justify-center mt-4">
-        <x-text-input placeholder="Tìm kiếm" class="w-full md:w-5/6 ml-0 md:ml-2" />
-        <button type="submit" class="border-none p-2 hover:bg-gray-200 rounded-md"><x-gmdi-search class="w-8 h-8 text-sky-500"/></button>
+        <x-text-input placeholder="Tìm kiếm" wire:model.debounce.300ms="searchTerm" class="w-full md:w-5/6 ml-0 md:ml-2" />
+        <button type="submit" class="border-none p-2 hover:bg-gray-200 rounded-md"><x-gmdi-search class="w-8 h-8 text-mainColor1"/></button>
     </form>
     <div class="overflow-y-scroll overflow-x-hidden h-9/10">
         <div class="flex items-center flex-col">
@@ -9,7 +9,7 @@
             @foreach($conversation_list as $conversation)
             <div wire:click="selectConversation({{$conversation->id}})" class="flex items-center justify-start gap-2 w-full pl-3 py-2 relative hover:bg-gray-300 hover:cursor-pointer">
                 @if($conversation->sender_id != Auth::user()->id)
-                <div class="flex justify-center items-center">
+                <div class="flex justify-center items-center flex-shrink-0">
                     <img src="{{asset('storage/'.$conversation->sender->avatar)}}" class="w-10 h-10 md:w-12 md:h-12 rounded-full" alt="">
                 </div>
                 <div class="flex flex-col py-2 md:w-3/4 w-10/12">
@@ -39,7 +39,7 @@
                     <span class="text-sm text-gray-400">{{$conversation->latestMessage->formatted_time}}</span>
                 </div>
                 @else
-                <div class="flex">
+                <div class="flex justify-center items-center flex-shrink-0">
                     <img src="{{asset('storage/'.$conversation->receiver->avatar)}}" class="w-12 h-12 rounded-full" alt="">
                 </div>
                 <div class="flex flex-grow flex-col py-2">
@@ -79,6 +79,3 @@
     </div>
 
 </div>
-<script>
-    window.userID = @json(Auth::user()->id);
-</script>

@@ -12,13 +12,16 @@
         "codeat3/blade-simple-icons": "^5.18",
         "davidhsianturi/blade-bootstrap-icons": "^1.5",
         "faisal50x/blade-ionicons": "^1.0",
+        "http-interop/http-factory-guzzle": "^1.2",
         "jeroennoten/laravel-adminlte": "^3.14",
         "laravel/framework": "^11.9",
         "laravel/reverb": "^1.0",
+        "laravel/scout": "^10.11",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
         "livewire/livewire": "^3.5",
-        "livewire/volt": "^1.0"
+        "livewire/volt": "^1.0",
+        "meilisearch/meilisearch-php": "^1.12"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

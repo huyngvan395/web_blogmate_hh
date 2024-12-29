@@ -198,40 +198,39 @@ $heads = [
     }
 });
 
-    $('.delete-btn').on('click',function() {
+$('#table1').on('click', '.delete-btn', function() {
         var row = $(this).closest('tr'); 
 
         if (confirm("Bạn có chắc chắn muốn xóa blog?")) {
             $.ajax({
-                    url: "/blog/delete", // URL đến route
-                    type: 'POST', // Phương thức HTTP
-                    data: {
-                        blogID: $(this).attr('data-id'),
-                        _token: '{{ csrf_token() }}' // Thêm CSRF token
-                    },
-                    success: function(response) {
-                        // alert(response.msg);
-                        row.remove();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
+                url: "/blog/delete", 
+                type: 'POST', 
+                data: {
+                    blogID: $(this).attr('data-id'),
+                    _token: '{{ csrf_token() }}' 
+                },
+                success: function(response) {
+                    // alert(response.msg);
+                    row.remove();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
             });
-        }}
-    )
+        }
+    });
 
-    $('.detail-btn').on('click', function() {
-        var blogTitle=$(this).attr('data-title');
-        var blogContent=$(this).attr('data-content');
-        var authorImage=$(this).attr('data-author-image');
-        var authorName=$(this).attr('data-author-name');
+    $('#table1').on('click', '.detail-btn', function() {
+        var blogTitle = $(this).attr('data-title');
+        var blogContent = $(this).attr('data-content');
+        var authorImage = $(this).attr('data-author-image');
+        var authorName = $(this).attr('data-author-name');
         
         $('#blog-title').text(blogTitle);
         $('#author-name').text(authorName);
         $('#author-image').attr('src', authorImage);
         $('#blogContent').html(blogContent);
-
-    })
+    });
 });
 </script>
 @stop

@@ -16,6 +16,10 @@ Broadcast::channel('updateChatList.{userID}', function ($user, $userID) {
     return $user->id === $userID;
 });
 
+Broadcast::channel('notifications.{userTarget_id}', function ($user, $userTarget_id) {
+    return $user->id === $userTarget_id;
+});
+
 // Broadcast::channel('conversations.{conversation_id}', function ($user){
 //     return true;
 // });

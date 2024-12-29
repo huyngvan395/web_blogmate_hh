@@ -15,4 +15,18 @@ class InfoUserController extends Controller
 
         return view('user.info_user', compact('user'));
     }
+
+    public function showFollower($infoUser)
+    {
+        $user = User::with(['followers'])->where('email', 'like', "$infoUser%")->first();
+
+        return view('user.follower', compact('user'));
+    }
+
+    public function showFollowing($infoUser)
+    {
+        $user = User::where('email', 'like', "$infoUser%")->first();
+
+        return view('user.following', compact('user'));
+    }
 }

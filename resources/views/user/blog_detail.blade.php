@@ -63,7 +63,7 @@
                     <div x-cloak x-show="showMoreOption" class="absolute -bottom-8 right-0 border rounded-md bg-white">
                         @if(Auth::user()->id == $blog->user->id)
                         <div class="flex justify-center items-center">
-                            <div class="flex justify-center items-center hover:cursor-pointer hover:bg-gray-100 p-2">
+                            <div @click="deleteBlog({{$blog->id}})" class="flex justify-center items-center hover:cursor-pointer hover:bg-gray-100 p-2">
                                 <x-heroicon-s-trash class="w-4 h-4 text-red-500"/>
                                 <p class="text-red-500">Xóa bài viết</p>
                             </div>
@@ -90,7 +90,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         @foreach($othersBlog as $otherBlog)
                         {{-- card-blog --}}
-                        <a href="#" class="block shadow-md rounded-lg">
+                        <div data-id="{{Crypt::encryptString($otherBlog->id)}}" onclick="directToBlogDetail(this)" class="block shadow-md rounded-lg hover:cursor-pointer">
                             <div class="flex flex-col gap-3 justify-center items-center p-4">
                                 {{-- image --}}
                                 <div class="flex justify-center w-full overflow-hidden rounded-md h-52 ">
@@ -142,7 +142,7 @@
                                     
                                 </div>
                             </div>
-                        </a>
+                        </d>
                         @endforeach
                     </div>
                     @if($blog->user->blog->count() >4)
@@ -177,7 +177,7 @@
                             <div class="flex justify-between md:w-1/3 sm:w-3/4 w-full ">
                                 <div class="flex justify-center items-center gap-2">
                                     <div class="flex justify-center items-center relative">
-                                        <a href="" class="block"><img
+                                        <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', user.email.split('@')[0])" class="block"><img
                                                 :src="'{{ asset('storage/') }}' + '/' + user.avatar"
                                                 class="w-10 h-10 hover:opacity-60 rounded-full" alt="Ảnh đại diện">
                                         </a>
@@ -186,7 +186,7 @@
                                         </div>
                                     </div>
                                     <div class="flex">
-                                        <a href="#">
+                                        <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', user.email.split('@')[0])">
                                             <h1 class="hover:underline" x-text="user.name"></h1>
                                         </a>
                                     </div>
@@ -206,6 +206,7 @@
                     </div>
                 </div>
             </div>
+
             {{-- List user comment --}}
             <div x-show='showListUserComment' x-cloak
                 class="fixed w-full flex justify-center items-center inset-0 h-screen bg-opacity-0 bg-white z-50 "
@@ -219,16 +220,20 @@
                     <div class="flex flex-col justify-start items-center mt-4 ">
                         <h1 class="text-2xl p-5">Bình luận</h1>
                         <div x-ref="scrollCommentBox" @scroll="handleScroll()"
-                            class="w-full mt-4 h-64 overflow-y-scroll">
+                            class="w-full mt-4 h-96 overflow-y-scroll">
                             <template x-for="comment in comments" :key="comment.id">
                                 <div x-data="processComment(comment.id,comment.hearted_by_current_user, comment.hearted_count)"
                                     class="flex flex-col justify-between items-center px-2 py-2">
                                     <div class="flex flex-col w-full">
                                         <div class="flex items-start w-full">
-                                            <img :src="'{{ asset('storage/') }}' + '/' + comment.user.avatar"
+                                            <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', comment.user.email.split('@')[0])" class="block">
+                                                <img :src="'{{ asset('storage/') }}' + '/' + comment.user.avatar"
                                                 class="w-10 h-10 rounded-full mr-3" />
+                                            </a>
                                             <div class="p-2 bg-gray-200 rounded-md">
-                                                <p x-text="comment.user.name" class="font-bold"></p>
+                                                <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', comment.user.email.split('@')[0])" class="block">
+                                                    <p x-text="comment.user.name" class="font-bold hover:underline"></p>
+                                                </a>
                                                 <p x-text="comment.content" class="text-gray-600"></p>
                                             </div>
                                         </div>
@@ -259,7 +264,7 @@
                                         <form
                                             x-data="{ newComment: '', textareaHeight: 40, maxHeight: 150, minHeight: 40 }"
                                             x-init="textareaHeight = minHeight"
-                                            @submit="e=>{e.preventDefault(); comment()}"
+                                            @submit="e=>{e.preventDefault(); commentReply(comment.id); replyComment=!replyComment;}"
                                             class="relative box-border bottom-0 w-full flex items-center flex-grow px-3 ml-12 border-l-2 border-gray-400 pb-2 z-50 bg-white">
                                             <textarea x-ref="textarea" x-model='newComment'
                                                 class="flex-grow py-2 h- resize-none border-gray-300 focus:border-sky-500 focus:ring-sky-400 rounded-md shadow-sm overflow-hidden"
@@ -287,6 +292,84 @@
                                             </button>
                                         </form>
                                     </div>
+                                    {{-- reply comment temporary --}}
+                                    <div class="w-full pl-12" x-show="showRepliesTemporary">
+                                        <template x-for="reply in repliesList" :key="reply.id">
+                                            <div x-data="processComment(reply.id, reply.hearted_by_current_user, reply.hearted_count)"
+                                                class="flex flex-col border-l-2 border-gray-400 w-full justify-start items-start px-2 py-2">
+                                                <div class="flex flex-col">
+                                                    <div class="flex items-start w-full">
+                                                        <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', reply.user.email.split('@')[0])" class="block">
+                                                            <img :src="'{{ asset('storage/') }}' + '/' + reply.user.avatar"
+                                                            class="w-10 h-10 rounded-full mr-3" />
+                                                        </a>
+                                                        <div class="p-2 bg-gray-200 rounded-md">
+                                                            <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', reply.user.email.split('@')[0])" class="block">
+                                                                <p x-text="reply.user.name" class="font-bold hover:underline"></p>
+                                                            </a>
+                                                            <p x-text="reply.content" class="text-gray-600"></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex gap-2 justify-start items-center w-full pl-12 pt-1">
+                                                        <button class="hover:cursor-pointer flex items-center h-full"
+                                                            @click="heartComment(reply.id);heartedComment=!heartedComment">
+                                                            <template x-if="heartedComment">
+                                                                <x-heroicon-s-heart id="sHeart"
+                                                                    class="text-sky-500 w-5 h-5 " />
+                                                            </template>
+                                                            <template x-if="!heartedComment">
+                                                                <x-heroicon-s-heart id="oHeart"
+                                                                    class="text-gray-400 w-5 h-5 " />
+                                                            </template>
+                                                        </button>
+                                                        <p class="hover:underline hover:cursor-pointer text-gray-400"
+                                                            @click="replyComment=!replyComment">
+                                                            Trả lời
+                                                        </p>
+                                                        <p class="text-gray-400 flex justify-center items-center border rounded-md px-1">
+                                                            <span x-text="heartCommentCount"></span>
+                                                            <x-heroicon-s-heart id="sHeart" class=" w-3 h-3 " />
+                                                        </p>
+                                                        <p class="text-gray-400" x-text="reply.formatted_time">
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div x-cloak x-show="replyComment" class="flex w-full box-content">
+                                                    <form
+                                                        x-data="{ newComment: '', textareaHeight: 40, maxHeight: 150, minHeight: 40 }"
+                                                        x-init="textareaHeight = minHeight"
+                                                        @submit="e=>{e.preventDefault(); commentReply(reply.id); replyComment=!replyComment}"
+                                                        class="relative box-border bottom-0 w-full flex items-center flex-grow px-3 ml-12 border-l-2 border-gray-400 pb-2 z-50 bg-white">
+                                                        <textarea x-ref="textarea" x-model='newComment'
+                                                            class="flex-grow py-2 resize-none border-gray-300 focus:border-sky-500 focus:ring-sky-400 rounded-md shadow-sm overflow-hidden"
+                                                            :placeholder="'Trả lời bình luận '+ reply.user.name"
+                                                            :style="'height:' + textareaHeight + 'px; max-height:' + maxHeight + 'px; '"
+                                                            @input="textareaHeight = $refs.textarea.scrollHeight > maxHeight ? maxHeight : $refs.textarea.scrollHeight;
+                                                            if ($refs.textarea.value === '') {
+                                                                textareaHeight = minHeight;
+                                                            }" @keydown="
+                                                            if($event.key === 'Backspace' || $event.key === 'Delete') {
+                                                                textareaHeight = $refs.textarea.scrollHeight > minHeight ? $refs.textarea.scrollHeight : minHeight;
+                                                            }
+                                                            if($event.key === 'Enter'){
+                                                                $event.preventDefault();
+                                                                $refs.submitBtn.click();
+                                                                $refs.textarea.value = '';
+                                                                textareaHeight=minHeight;
+                                                            }
+                                                            ">
+                                                        </textarea>
+                                                        <button type='submit' x-ref='submitBtn'
+                                                            @click="textareaHeight=minHeight;$refs.textarea.value = '';"
+                                                            class="flex border-none justify-center items-center p-2 rounded-md hover:bg-gray-200 hover:cursor-pointer">
+                                                            <x-carbon-send-filled class="w-8 h-8 text-sky-500  " />
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div x-html="renderReplies(reply)"></div>
+                                            </div>
+                                        </template>
+                                    </div>
                                     <div class="w-full pl-12" x-show="!showReplies">
                                         <template x-if="comment.replies_count > 0">
                                             <div class="border-l-2 border-gray-400 pl-2 text-gray-400 ">
@@ -303,10 +386,14 @@
                                                 class="flex flex-col border-l-2 border-gray-400 w-full justify-start items-start px-2 py-2">
                                                 <div class="flex flex-col">
                                                     <div class="flex items-start w-full">
-                                                        <img :src="'{{ asset('storage/') }}' + '/' + reply.user.avatar"
+                                                        <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', reply.user.email.split('@')[0])" class="block">
+                                                            <img :src="'{{ asset('storage/') }}' + '/' + reply.user.avatar"
                                                             class="w-10 h-10 rounded-full mr-3" />
+                                                        </a>
                                                         <div class="p-2 bg-gray-200 rounded-md">
-                                                            <p x-text="reply.user.name" class="font-bold"></p>
+                                                            <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', reply.user.email.split('@')[0])" class="block">
+                                                                <p x-text="reply.user.name" class="font-bold hover:underline"></p>
+                                                            </a>
                                                             <p x-text="reply.content" class="text-gray-600"></p>
                                                         </div>
                                                     </div>
@@ -338,7 +425,7 @@
                                                     <form
                                                         x-data="{ newComment: '', textareaHeight: 40, maxHeight: 150, minHeight: 40 }"
                                                         x-init="textareaHeight = minHeight"
-                                                        @submit="e=>{e.preventDefault(); comment()}"
+                                                        @submit="e=>{e.preventDefault(); commentReply(reply.id); replyComment=!replyComment;}"
                                                         class="relative box-border bottom-0 w-full flex items-center flex-grow px-3 ml-12 border-l-2 border-gray-400 pb-2 z-50 bg-white">
                                                         <textarea x-ref="textarea" x-model='newComment'
                                                             class="flex-grow py-2 resize-none border-gray-300 focus:border-sky-500 focus:ring-sky-400 rounded-md shadow-sm overflow-hidden"
@@ -415,6 +502,10 @@
             </div>
         </div>
         <script>
+            function directToBlogDetail(element){
+                const hash_id= element.getAttribute('data-id'); 
+                window.location.href=`{{route('blog.blog-detail', ['id'=> '__ID__'])}}`.replace('__ID__', hash_id);
+            }
             document.addEventListener('alpine:init', () => {
                 Alpine.data('dataBlogDetail', () => ({
                     showListUserHeart : false, 
@@ -435,6 +526,18 @@
                         this.comments=@json($blog->comment);
                         console.log(this.usersWhoHearts);
                         console.log(this.comments);
+                    },
+                    deleteBlog(id){
+                        axios.post("/blog/destroy",{
+                            id:id 
+                        },{
+                            headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')}
+                        })
+                        .then((response)=>{
+                            console.log(response.data.msg);
+                            alert('Xóa bài viết thành công');
+                            window.location.href=response.data.redirect;
+                        })
                     },
                     handleScroll(){
                         const target=this.$refs.scrollCommentBox;
@@ -462,6 +565,9 @@
                                 }
                                 console.log(this.comments);
                                 console.log(response.data.lastPage);
+                            }else{
+                                this.isLoading=false;
+                                this.hasMoreComments = false;
                             }
                         })
                     },
@@ -498,7 +604,7 @@
                             headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')}
                         })
                         .then((response)=>{
-                            this.comments.push(response.data.comment);
+                            this.comments.unshift(response.data.comment);
                             this.newComment = '';
                             this.commentCount += 1;
                         })
@@ -506,9 +612,11 @@
                 }))
                 Alpine.data('processComment', (idComment, heartedComment, heartCount)=> ({
                     showReplies:false,
+                    showRepliesTemporary: true,
                     heartedComment: heartedComment,
                     heartCommentCount:heartCount,
                     replyComment: false,
+                    newComment: '',
                     repliesList: [],
                     page:1,
                     hasMoreRepies: true,
@@ -523,6 +631,23 @@
                             console.log(response.data.usersWhoHearts);
                         })
                     },
+                    commentReply(comment_id){
+                        if(this.newComment.trim() === '') return;
+                        axios.post('/reply',{
+                            user_id: "{{Auth::user()->id}}",
+                            blog_id: "{{$blog->id}}",
+                            comment_id: comment_id,
+                            content: this.newComment
+                        },{
+                            headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')}
+                        })
+                        .then((response)=>{
+                            this.repliesList.push(response.data.reply);
+                            console.log(this.repliesList);
+                            this.newComment = '';
+                            this.commentCount += 1;
+                        })
+                    },
                     fetchReplies(comment_id){
                         axios.post('/fetchReplies',{
                             comment_id: comment_id,
@@ -532,8 +657,14 @@
                         })
                         .then((response)=>{
                             if(response.data.replies && response.data.replies.data.length >0){
-                                this.repliesList.push(...response.data.replies.data);
+                                if(this.showRepliesTemporary){
+                                    this.repliesList = response.data.replies.data;
+                                }else{
+                                    this.repliesList.push(...response.data.replies.data);
+                                }
+                                
                                 if(!this.showReplies){
+                                    this.showRepliesTemporary=!this.showRepliesTemporary;
                                     this.showReplies=!this.showReplies;
                                 }
                                 this.page+=1;
@@ -541,59 +672,58 @@
                                     this.hasMoreComments = false;
                                 }
                             }
+                            console.log(this.repliesList);
                             console.log(response.data.replies.data);
-                            
                         })
                     },
                     renderReplies(obj){
-                        let html=`<div class="w-full pl-12" x-show="!showReplies">
-                                        <template x-if="${obj.replies_count} > 0">
-                                            <div class=" text-gray-400 ">
-                                                <p @click="fetchReplies(${obj.id})" class="hover:underline hover:cursor-pointer">
-                                                    Xem <span x-text="${obj.replies_count}"></span> câu trả lời</p>
-                                            </div>
-                                        </template>
-                                    </div>
-                                    <div class="w-full" x-show="showReplies">
+                        let html=`
+                                <div class="w-full" x-show="showRepliesTemporary">
                                         <template x-for="reply in repliesList" :key="reply.id">
                                             <div x-data="processComment(reply.id, reply.hearted_by_current_user, reply.hearted_count)"
                                                 class="flex flex-col w-full justify-start items-start py-2">
                                                 <div class="flex flex-col">
                                                     <div class="flex items-start w-full">
-                                                        <img :src="'{{ asset('storage/') }}' + '/' + reply.user.avatar"
+                                                        <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', reply.user.email.split('@')[0])" class="block">
+                                                            <img :src="'{{ asset('storage/') }}' + '/' + reply.user.avatar"
                                                             class="w-10 h-10 rounded-full mr-3" />
+                                                        </a>
                                                         <div class="p-2 bg-gray-200 rounded-md">
-                                                            <div class="flex items-center gap-1"><p x-text="reply.user.name" class="font-bold"></p><x-carbon-triangle-right-solid class="text-gray-500 w-3 h-3" /><p x-text="reply.reply_to.user.name" class="font-bold"></p></div>
+                                                            <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', reply.user.email.split('@')[0])" class="block">
+                                                                <p x-text="reply.user.name" class="font-bold hover:underline"></p>
+                                                            </a>
                                                             <p x-text="reply.content" class="text-gray-600"></p>
                                                         </div>
                                                     </div>
-                                                    <div class="flex gap-2 justify-start items-start w-full pl-12" pt-1>
-                                                        <button class="hover:cursor-pointer flex items-center h-full" @click="heartComment(reply.id);heartedComment=!heartedComment">
+                                                    <div class="flex gap-2 justify-start items-center w-full pl-12 pt-1">
+                                                        <button class="hover:cursor-pointer flex items-center h-full"
+                                                            @click="heartComment(reply.id);heartedComment=!heartedComment">
                                                             <template x-if="heartedComment">
-                                                                <x-heroicon-s-heart id="sHeart" class="text-sky-500 w-5 h-5 " />
-                                                                </template>
-                                                                <template x-if="!heartedComment">
-                                                                    <x-heroicon-s-heart id="oHeart" class="text-gray-400 w-5 h-5 " />
-                                                                    </template>
-                                                                    </button>
-                                                                    <p class="hover:underline hover:cursor-pointer text-gray-400"
-                                                                    @click="replyComment=!replyComment">
-                                                                    Trả lời
-                                                                    </p>
-                                                                    <p
-                                                                    class="text-gray-400 flex justify-center items-center border rounded-md px-1">
-                                                                    <span x-text="heartCommentCount"></span>
-                                                                    <x-heroicon-s-heart id="sHeart" class=" w-3 h-3 " />
-                                                                    </p>
-                                                                    <p class="text-gray-400" x-text="comment.formatted_time">
-                                                                    </p>
-                                                                    </div>
-                                                                    </div>
+                                                                <x-heroicon-s-heart id="sHeart"
+                                                                    class="text-sky-500 w-5 h-5 " />
+                                                            </template>
+                                                            <template x-if="!heartedComment">
+                                                                <x-heroicon-s-heart id="oHeart"
+                                                                    class="text-gray-400 w-5 h-5 " />
+                                                            </template>
+                                                        </button>
+                                                        <p class="hover:underline hover:cursor-pointer text-gray-400"
+                                                            @click="replyComment=!replyComment">
+                                                            Trả lời
+                                                        </p>
+                                                        <p class="text-gray-400 flex justify-center items-center border rounded-md px-1">
+                                                            <span x-text="heartCommentCount"></span>
+                                                            <x-heroicon-s-heart id="sHeart" class=" w-3 h-3 " />
+                                                        </p>
+                                                        <p class="text-gray-400" x-text="reply.formatted_time">
+                                                        </p>
+                                                    </div>
+                                                </div>
                                                 <div x-cloak x-show="replyComment" class="flex w-full box-content">
                                                     <form
                                                         x-data="{ newComment: '', textareaHeight: 40, maxHeight: 150, minHeight: 40 }"
                                                         x-init="textareaHeight = minHeight"
-                                                        @submit="e=>{e.preventDefault(); comment()}"
+                                                        @submit="e=>{e.preventDefault(); commentReply(reply.id); replyComment=!replyComment}"
                                                         class="relative box-border bottom-0 w-full flex items-center flex-grow px-3 ml-12 border-l-2 border-gray-400 pb-2 z-50 bg-white">
                                                         <textarea x-ref="textarea" x-model='newComment'
                                                             class="flex-grow py-2 resize-none border-gray-300 focus:border-sky-500 focus:ring-sky-400 rounded-md shadow-sm overflow-hidden"
@@ -621,6 +751,90 @@
                                                         </button>
                                                     </form>
                                                 </div>
+                                                <div x-html="renderReplies(reply)"></div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                <div class="w-full pl-12" x-show="!showReplies">
+                                        <template x-if="${obj.replies_count} > 0">
+                                            <div class=" text-gray-400 ">
+                                                <p @click="fetchReplies(${obj.id})" class="hover:underline hover:cursor-pointer">
+                                                    Xem <span x-text="${obj.replies_count}"></span> câu trả lời</p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="w-full" x-show="showReplies">
+                                        <template x-for="reply in repliesList" :key="reply.id">
+                                            <div x-data="processComment(reply.id, reply.hearted_by_current_user, reply.hearted_count)"
+                                                class="flex flex-col w-full justify-start items-start py-2">
+                                                <div class="flex flex-col">
+                                                    <div class="flex items-start w-full">
+                                                        <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', reply.user.email.split('@')[0])" class="block">
+                                                            <img :src="'{{ asset('storage/') }}' + '/' + reply.user.avatar"
+                                                            class="w-10 h-10 rounded-full mr-3" />
+                                                        </a>
+                                                        <div class="p-2 bg-gray-200 rounded-md">
+                                                            <a :href="'{{ route('user.info', ['infoUser' => 'temp']) }}'.replace('temp', reply.user.email.split('@')[0])" class="block">
+                                                                <p x-text="reply.user.name" class="font-bold hover:underline"></p>
+                                                            </a>
+                                                            <p x-text="reply.content" class="text-gray-600"></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex gap-2 justify-start items-start w-full pl-12 pt-1" >
+                                                        <button class="hover:cursor-pointer flex items-center h-full" @click="heartComment(reply.id);heartedComment=!heartedComment">
+                                                            <template x-if="heartedComment">
+                                                                <x-heroicon-s-heart id="sHeart" class="text-sky-500 w-5 h-5 " />
+                                                                </template>
+                                                                <template x-if="!heartedComment">
+                                                                    <x-heroicon-s-heart id="oHeart" class="text-gray-400 w-5 h-5 " />
+                                                                    </template>
+                                                                    </button>
+                                                                    <p class="hover:underline hover:cursor-pointer text-gray-400"
+                                                                    @click="replyComment=!replyComment">
+                                                                    Trả lời
+                                                                    </p>
+                                                                    <p
+                                                                    class="text-gray-400 flex justify-center items-center border rounded-md px-1">
+                                                                    <span x-text="heartCommentCount"></span>
+                                                                    <x-heroicon-s-heart id="sHeart" class=" w-3 h-3 " />
+                                                                    </p>
+                                                                    <p class="text-gray-400" x-text="reply.formatted_time">
+                                                                    </p>
+                                                                    </div>
+                                                                    </div>
+                                                <div x-cloak x-show="replyComment" class="flex w-full box-content">
+                                                    <form
+                                                        x-data="{ newComment: '', textareaHeight: 40, maxHeight: 150, minHeight: 40 }"
+                                                        x-init="textareaHeight = minHeight"
+                                                        @submit="e=>{e.preventDefault(); commentReply(reply.id); replyComment=!replyComment;}"
+                                                        class="relative box-border bottom-0 w-full flex items-center flex-grow px-3 ml-12 border-l-2 border-gray-400 pb-2 z-50 bg-white">
+                                                        <textarea x-ref="textarea" x-model='newComment'
+                                                            class="flex-grow py-2 resize-none border-gray-300 focus:border-sky-500 focus:ring-sky-400 rounded-md shadow-sm overflow-hidden"
+                                                            :placeholder="'Trả lời bình luận '+ reply.user.name"
+                                                            :style="'height:' + textareaHeight + 'px; max-height:' + maxHeight + 'px; '"
+                                                            @input="textareaHeight = $refs.textarea.scrollHeight > maxHeight ? maxHeight : $refs.textarea.scrollHeight;
+                                                            if ($refs.textarea.value === '') {
+                                                                textareaHeight = minHeight;
+                                                            }" @keydown="
+                                                            if($event.key === 'Backspace' || $event.key === 'Delete') {
+                                                                textareaHeight = $refs.textarea.scrollHeight > minHeight ? $refs.textarea.scrollHeight : minHeight;
+                                                            }
+                                                            if($event.key === 'Enter'){
+                                                                $event.preventDefault();
+                                                                $refs.submitBtn.click();
+                                                                $refs.textarea.value = '';
+                                                                textareaHeight=minHeight;
+                                                            }
+                                                            ">
+                                                        </textarea>
+                                                        <button type='submit' x-ref='submitBtn'
+                                                            @click="textareaHeight=minHeight;$refs.textarea.value = '';"
+                                                            class="flex border-none justify-center items-center p-2 rounded-md hover:bg-gray-200 hover:cursor-pointer">
+                                                            <x-carbon-send-filled class="w-8 h-8 text-sky-500  " />
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div x-html="renderReplies(reply)"></div>
                                             </div>
                                         </template>
                                     </div>`;

@@ -24,175 +24,213 @@
       <!-- Previous Button -->
       <button @click="prev()"
         class="absolute flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 left-1/3 bottom-9 -translate-y-1/2 sm:bottom-1/2 sm:left-2 rounded-full bg-white px-3 py-3 z-20">
-        <x-heroicon-s-arrow-left class="w-6 h-8 sm:w-8 sm:h-8 text-sky-500" />
+        <x-heroicon-s-arrow-left class="w-6 h-8 sm:w-8 sm:h-8 text-mainColor1" />
       </button>
 
       <!-- Next Button -->
       <button @click="next()"
         class="absolute flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 right-1/3 bottom-9 sm:right-2 sm:bottom-1/2 -translate-y-1/2 rounded-full bg-white px-3 py-3 z-20">
-        <x-heroicon-s-arrow-right class="w-6 h-8 sm:w-8 sm:h-8 text-sky-500" />
+        <x-heroicon-s-arrow-right class="w-6 h-8 sm:w-8 sm:h-8 text-mainColor1" />
       </button>
-
-      <!-- Indicator Dots -->
-      {{-- <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        <template x-for="(slide, index) in slides" :key="index">
-          <div :class="{ 'bg-emerald-700': current === index, 'bg-white': current !== index }"
-            class="w-3 h-3 rounded-full cursor-pointer" @click="current = index"></div>
-        </template>
-      </div> --}}
     </div>
 
     {{-- card-main--}}
     <div class=" relative -mt-14 md:-mt-24 flex justify-center w-full h-auto z-30">
       <div class="grid md:grid-cols-2 grid-cols-1 w-5/6 h-auto px-10 py-8 bg-white border border-gray-200 rounded-sm">
-        {{-- <div class="flex justify-center items-center px-8 py-8 md:border-0 border-b">
-          <div class="flex flex-col justify-center items-center">
-            <div class="rounded-full flex justify-center items-center border border-sky-500 w-24 h-24">
-              <x-gmdi-volunteer-activism-o class="w-16 h-16 text-sky-500" />
-            </div>
-            <h2 class="sm:text-xl md:text-2xl text-lg font-bold p-1 text-nowrap">Tình nguyện viên</h2>
-            <a href="{{route("volunteer")}}" class="flex items-center justify-center text-sky-500 p-1 text-nowrap">Tham
-              gia
-              <x-heroicon-s-arrow-right class="w-5 h-5 text-sky-500" />
-            </a>
-          </div>
-        </div> --}}
         <div class="flex justify-center items-center px-8 py-8 md:border-b-0 border-b">
           <div class="flex flex-col justify-center items-center">
-            <div class="rounded-full flex justify-center items-center border border-sky-500 w-24 h-24">
-              <x-carbon-report class="w-16 h-16 text-sky-500" />
+            <div class="rounded-full flex justify-center items-center border border-mainColor2 w-24 h-24">
+              <x-carbon-report class="w-16 h-16 text-mainColor1" />
             </div>
             <h2 class="sm:text-xl md:text-2xl text-lg font-bold p-1 text-nowrap">Blog</h2>
-            <a href="{{route("blog.create")}}" class="flex items-center justify-center text-sky-500 p-1 text-nowrap">Bắt đầu viết
-              <x-heroicon-s-arrow-right class="w-5 h-5 text-sky-500" />
+            <a href="{{route("blog.create")}}" class="flex items-center justify-center text-mainColor1 p-1 text-nowrap">Bắt đầu viết
+              <x-heroicon-s-arrow-right class="w-5 h-5 text-mainColor1" />
             </a>
           </div>
         </div>
         <div class="flex justify-center items-center px-8 py-8 md:border-l border-0">
           <div class="flex flex-col justify-center items-center">
-            <div class="rounded-full flex justify-center items-center border border-sky-500 w-24 h-24">
-              <x-gmdi-social-distance-s class="w-16 h-16 text-sky-500" />
+            <div class="rounded-full flex justify-center items-center border border-mainColor2 w-24 h-24">
+              <x-gmdi-social-distance-s class="w-16 h-16 text-mainColor1" />
             </div>
             <h2 class="sm:text-xl md:text-2xl text-lg font-bold p-1 text-nowrap">Cộng đồng</h2>
-            <a href="{{route("blog")}}" class="flex items-center justify-center text-sky-500 p-1 text-nowrap">Khám phá
-              <x-heroicon-s-arrow-right class="w-5 h-5 text-sky-500" />
+            <a href="{{route("blog")}}" class="flex items-center justify-center text-mainColor1 p-1 text-nowrap">Khám phá
+              <x-heroicon-s-arrow-right class="w-5 h-5 text-mainColor1" />
             </a>
           </div>
         </div>
       </div>
     </div>
 
-    {{-- <div class="grid md:grid-cols-2 grid-cols-1 mt-10 px-10 gap-10">
-      <div>
-        <img src="{{asset(" images/image-background-web/bg1_home.png")}}" alt="bg1">
+    <!-- Hero Section -->
+    <section class="bg-white py-16 mt-10">
+      <div class="container mx-auto px-4 text-center">
+          <h2 class="inline-flex text-4xl font-bold text-gray-800 mb-4">Chào mừng đến với <img src="{{asset('images/logo/BlogMate.webp')}}" alt="" class="w-28 h-24 -translate-y-9 pl-3"></h2>
+          <p class="text-lg text-gray-600 mb-6">Khám phá những câu chuyện, hiểu biết sâu sắc và ý tưởng thú vị từ mọi người trên khắp thế giới.</p>
+          <a href="{{route('blog')}}" class="bg-indigo-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-indigo-600 transition duration-300">
+              Bắt đầu
+          </a>
       </div>
-      <div>
-        <h2 class="md:text-5xl text-lg font-bold leading-loose pb-5 ">Bảo Vệ Trái Đất Chống Lại Biến Đổi Khí Hậu</h2>
-        <p class="text-lg leading-loose text-gray-500 pb-4">Hãy cùng chung tay bảo vệ môi trường và chống lại biến đổi
-          khí hậu. Mỗi hành động nhỏ đều góp phần tạo nên sự thay đổi lớn cho hành tinh của chúng ta. Cùng nhau bảo vệ
-          môi trường xanh - sạch - đẹp, vì một tương lai bền vững.</p>
-        <ul class="flex flex-col gap-8">
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Chung tay trồng cây gây rừng, cải thiện môi trường sống
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Giảm thiểu sử dụng nhựa và rác thải khó phân hủy
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Sử dụng năng lượng tái tạo và tiết kiệm tài nguyên
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Thúc đẩy lối sống thân thiện với môi trường
-          </li>
-        </ul>
-      </div>
-    </div> --}}
+  </section>
 
-    {{-- blog-bg --}}
-    <div class="grid md:grid-cols-2 grid-cols-1 mt-16 px-10 gap-10">
-      <div>
-        <h1 class="md:text-5xl text-lg font-bold leading-loose pb-5">
-          Khơi nguồn cảm hứng, chia sẻ đam mê cùng cộng đồng sáng tạo
-        </h1>
-        <ul class="flex flex-col gap-2">
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Kết nối với cộng đồng sáng tạo: Chia sẻ bài viết của bạn với hàng ngàn người có cùng sở thích, đam mê.
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Phát triển kỹ năng viết lách: Tính năng hỗ trợ soạn thảo phong phú, từ cơ bản đến nâng cao, giúp bạn dễ dàng tạo nên những bài viết chất lượng.
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Tạo dấu ấn cá nhân: Tùy chỉnh bài viết với hình ảnh, video, và định dạng văn bản để thể hiện phong cách riêng.
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Giao lưu, học hỏi: Nhận phản hồi, bình luận từ độc giả và khám phá thêm nhiều góc nhìn mới mẻ từ cộng đồng.
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Xây dựng thương hiệu cá nhân: Biến blog của bạn thành một kênh để khẳng định chuyên môn và tạo dựng hình ảnh chuyên nghiệp.
-          </li>
-        </ul>
+    {{-- new section --}}
+    <div class="container pt-4 mx-auto px-6 py-20 bg-gradient-to-r from-[#5271ff] to-[#05e0e9]">
+      <!-- Khơi nguồn cảm hứng -->
+      <div class="mt-20 grid md:grid-cols-2 grid-cols-1 gap-16">
+          <!-- Text Section -->
+          <div class="flex flex-col justify-center text-center md:text-left space-y-6">
+              <h1 class="text-6xl font-extrabold text-white leading-tight drop-shadow-lg">
+                  Khơi nguồn cảm hứng, chia sẻ đam mê cùng cộng đồng sáng tạo
+              </h1>
+              <p class="text-xl text-gray-200 max-w-lg mx-auto">
+                  Khám phá một cộng đồng nơi bạn có thể kết nối, học hỏi và phát triển các kỹ năng sáng tạo của mình.
+              </p>
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                  <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <h2 class="text-2xl font-semibold text-[#5271ff] mb-4">Kết nối cộng đồng</h2>
+                      <p class="text-gray-600">Chia sẻ đam mê và kết nối với những nhà sáng tạo tài năng.</p>
+                  </div>
+                  <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <h2 class="text-2xl font-semibold text-[#5271ff] mb-4">Phát triển kỹ năng</h2>
+                      <p class="text-gray-600">Học hỏi và trau dồi các kỹ năng sáng tạo để thành công trong ngành nghề.</p>
+                  </div>
+                  <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <h2 class="text-2xl font-semibold text-[#5271ff] mb-4">Xây dựng dấu ấn</h2>
+                      <p class="text-gray-600">Tạo dấu ấn cá nhân với những bài viết độc đáo và phong cách riêng biệt.</p>
+                  </div>
+              </div>
+          </div>
+  
+          <!-- Image Section -->
+          <div class="relative flex justify-center items-center">
+              <img src="{{asset('images/image-background-web/blog_template_bg.png')}}" alt="Blog Template Background" class="rounded-2xl shadow-lg transform hover:scale-110 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-black opacity-50 rounded-2xl"></div>
+          </div>
       </div>
-      <div>
-        <img src="{{asset("images/image-background-web/blog_template_bg.png")}}" alt="bg1">
+  
+      <!-- Chat Section -->
+      <div class="mt-32 grid md:grid-cols-2 grid-cols-1 gap-16">
+          <!-- Text Section -->
+          <div class="flex flex-col justify-center text-center md:text-left space-y-6">
+              <h1 class="text-6xl font-extrabold text-[#05e0e9] leading-tight drop-shadow-lg">
+                  🌟 Chat để Kết Nối & Truyền Cảm Hứng
+              </h1>
+              <p class="text-xl text-gray-200 max-w-lg mx-auto">
+                  Tạo ra không gian để kết nối, thảo luận và lan tỏa những ý tưởng sáng tạo.
+              </p>
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                  <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <h2 class="text-2xl font-semibold text-[#05e0e9] mb-4">Thảo luận sáng tạo</h2>
+                      <p class="text-gray-600">Chia sẻ ý tưởng và kinh nghiệm sáng tạo trong môi trường cởi mở.</p>
+                  </div>
+                  <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <h2 class="text-2xl font-semibold text-[#05e0e9] mb-4">Kết nối cộng đồng</h2>
+                      <p class="text-gray-600">Tìm kiếm và kết nối với những người có cùng đam mê và mục tiêu.</p>
+                  </div>
+                  <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <h2 class="text-2xl font-semibold text-[#05e0e9] mb-4">Tạo cơ hội mới</h2>
+                      <p class="text-gray-600">Mở rộng mạng lưới của bạn và tìm kiếm cơ hội hợp tác mới.</p>
+                  </div>
+              </div>
+              <h1 class="text-5xl font-extrabold text-[#05e0e9] mt-16 drop-shadow-lg">
+                  🔧 Cách Tham Gia Chat
+              </h1>
+              <ul class="space-y-4 text-lg text-gray-200 max-w-lg mx-auto">
+                  <li class="flex items-center">
+                      <x-heroicon-o-ticket class="text-[#05e0e9] w-6 h-6 mr-4" /> 
+                      Đăng nhập vào tài khoản của bạn để tham gia cộng đồng.
+                  </li>
+                  <li class="flex items-center">
+                      <x-heroicon-o-ticket class="text-[#05e0e9] w-6 h-6 mr-4" /> 
+                      Theo dõi các tác giả và nhà sáng tạo bạn yêu thích.
+                  </li>
+                  <li class="flex items-center">
+                      <x-heroicon-o-ticket class="text-[#05e0e9] w-6 h-6 mr-4" /> 
+                      Bắt đầu trò chuyện ngay lập tức bằng một cú nhấp chuột!
+                  </li>
+              </ul>
+          </div>
+  
+          <!-- Image Section -->
+          <div class="relative flex justify-center items-center">
+              <img src="{{asset('images/image-background-web/chat_bg.gif')}}" alt="Chat Background" class="rounded-2xl shadow-lg transform hover:scale-110 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-black opacity-50 rounded-2xl"></div>
+          </div>
       </div>
-    </div>
+  </div>
 
-    {{-- chat-bg --}}
-    <div class="grid md:grid-cols-2 grid-cols-1 mt-16 px-10 gap-10">
-      <div>
-        <img src="{{asset("images/image-background-web/chat_bg.gif")}}" alt="bg1">
-      </div>
-      <div>
-        <h1 class="md:text-5xl text-lg font-bold leading-loose pb-5">
-          🌟 Chat để Kết Nối & Truyền Cảm Hứng
-        </h1>
-        <ul class="flex flex-col gap-2">
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Thảo luận sâu hơn về những bài viết, câu chuyện, hoặc ý tưởng mà bạn yêu thích.
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Học hỏi từ cộng đồng: Chia sẻ kinh nghiệm, góc nhìn sáng tạo, hoặc đặt câu hỏi trực tiếp đến tác giả và các nhà sáng tạo khác.
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Kết nối không giới hạn: Tìm kiếm những người cùng đam mê, trao đổi để mở rộng tầm nhìn và kiến thức.
-          </li>
-        </ul>
-        <h1 class="md:text-5xl text-lg font-bold leading-loose pb-5">
-          🔧 Cách Tham Gia Chat
-        </h1>
-        <ul class="flex flex-col gap-2">
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Đăng nhập vào tài khoản của bạn để tham gia cộng đồng.
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Đọc hay theo dõi các nhà sáng tạo, các tác giả trên nền tảng
-          </li>
-          <li class="flex items-center text-lg gap-5 text-gray-500">
-            <x-heroicon-o-ticket class="text-sky-500 w-4 h-4" /> Bắt đầu trò chuyện bằng cách nhấn vào "Nhắn tin" với tác giả đó chỉ một cú nhấp chuột để kết nối ngay!
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    {{-- statistical --}}
-    <div class="flex w-full justify-center items-center sm:px-8 mt-10 bg-sky-500">
-      <div class="grid md:grid-cols-2 grid-cols-1 gap-5 py-4">
-        <div class="flex justify-center items-center w-80 text-white p-10 rounded-lg border bg-white/15 backdrop-blur-md">
-          <x-heroicon-s-user-group class="w-40 h-40"/>
-          <div class="flex flex-col p-4">
-            <h1 class="text-5xl font-bold">{{$userCount}}</h1>
-            <h1 class="text-lg ">Số lượng người dùng</h1>
+  {{-- <!-- Featured Blogs -->
+  <section id="blogs" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Blog nổi bật</h3>
+        <div x-data="{ currentIndex: 0 }" class="relative">
+            <div class="flex space-x-6 overflow-hidden">
+                <!-- Blog Card -->
+                <template x-for="(blog, index) in [{title: 'Blog Title 1', description: 'Lorem ipsum dolor sit amet.'}, {title: 'Blog Title 2', description: 'Consectetur adipiscing elit.'}, {title: 'Blog Title 3', description: 'Sed do eiusmod tempor incididunt.'}]" :key="index">
+                    <div class="min-w-[300px] bg-white rounded-lg shadow-md p-4 flex flex-col items-center text-center transition-transform duration-500" :style="`transform: translateX(-${currentIndex * 100}%)`">
+                        <img src="https://via.placeholder.com/300x200" alt="Blog Image" class="w-full rounded-md mb-4">
+                        <h4 class="text-lg font-bold text-gray-800" x-text="blog.title"></h4>
+                        <p class="text-gray-600 mt-2" x-text="blog.description"></p>
+                    </div>
+                </template>
+            </div>
+            <div class="mt-4 flex justify-center items-center gap-2 text-center">
+              <button @click="currentIndex = (currentIndex > 0) ? currentIndex - 1 : 2" class="flex justify-center items-center bg-indigo-500 text-white p-4 rounded-full"><x-bi-chevron-left /></button>
+              <button @click="currentIndex = (currentIndex < 2) ? currentIndex + 1 : 0" class="flex justify-center items-center bg-indigo-500 text-white p-4 rounded-full"><x-bi-chevron-right /></button>
           </div>
         </div>
-        <div class="flex justify-center items-center w-80 text-white p-10 rounded-lg border bg-white/15 backdrop-blur-md">
-          <x-si-blogger class="w-40 h-40"/>
-          <div class="flex flex-col p-4">
-            <h1 class="text-5xl font-bold">{{$blogCount}}</h1>
-            <h1 class="text-lg ">Số lượng blog</h1>
-          </div>
-        </div>
-      </div>
     </div>
+</section>
+
+  <!-- Featured Users Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Người dùng nổi bật</h3>
+        <div x-data="{ currentIndex: 0 }" class="relative">
+            <div class="flex space-x-6 overflow-hidden">
+                <!-- User Card -->
+                <template x-for="(user, index) in [{name: 'User Name 1', description: 'Lorem ipsum dolor.'}, {name: 'User Name 2', description: 'Consectetur adipiscing elit.'}, {name: 'User Name 3', description: 'Sed do eiusmod tempor.'},{name: 'User Name 1', description: 'Lorem ipsum dolor.'}, {name: 'User Name 2', description: 'Consectetur adipiscing elit.'}, {name: 'User Name 3', description: 'Sed do eiusmod tempor.'}]" :key="index">
+                    <div class="min-w-[300px] bg-gray-100 rounded-lg shadow-md p-6 flex flex-col items-center text-center transition-transform duration-500" :style="`transform: translateX(-${currentIndex * 100}%)`">
+                        <img src="https://via.placeholder.com/100" alt="User Avatar" class="w-24 h-24 rounded-full mb-4">
+                        <h4 class="text-lg font-bold text-gray-800" x-text="user.name"></h4>
+                        <p class="text-gray-600" x-text="user.description"></p>
+                    </div>
+                </template>
+            </div>
+            <div class="mt-4 flex justify-center items-center gap-2 text-center">
+                <button @click="currentIndex = (currentIndex > 0) ? currentIndex - 1 : 2" class="flex justify-center items-center bg-indigo-500 text-white p-4 rounded-full"><x-bi-chevron-left /></button>
+                <button @click="currentIndex = (currentIndex < 2) ? currentIndex + 1 : 0" class="flex justify-center items-center bg-indigo-500 text-white p-4 rounded-full"><x-bi-chevron-right /></button>
+            </div>
+        </div>
+    </div>
+</section> --}}
+
+ <!-- Statistics Section -->
+ <section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4 text-center">
+      <h3 class="text-3xl font-bold text-gray-800 mb-6">Thành tựu</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <!-- Blogs Count -->
+          <div class="bg-white rounded-lg shadow-md p-6">
+              <h4 class="text-4xl font-bold text-indigo-500">{{$blogCount}}</h4>
+              <p class="text-gray-600 mt-2">Blog đã đăng tải</p>
+          </div>
+          <!-- Users Count -->
+          <div class="bg-white rounded-lg shadow-md p-6">
+              <h4 class="text-4xl font-bold text-indigo-500">{{$userCount}}</h4>
+              <p class="text-gray-600 mt-2">Người dùng</p>
+          </div>
+      </div>
+  </div>
+</section>
+
+  <!-- About Section -->
+  <section id="about" class="py-16 bg-white">
+      <div class="container mx-auto px-4 text-center">
+          <h3 class="text-3xl font-bold text-gray-800 mb-6">Về chúng tôi</h3>
+          <p class="inline-flex text-gray-600 max-w-3xl mx-auto">Tại <img src="{{asset('images/logo/BlogMate.webp')}}" alt="" class="w-20 h-16 -translate-y-6">, chúng tôi mong muốn kết nối mọi người thông qua những câu chuyện và ý tưởng. Nền tảng của chúng tôi trao quyền cho các cá nhân thể hiện sự sáng tạo, chia sẻ kiến ​​thức và xây dựng mối quan hệ có ý nghĩa với những người khác trên khắp thế giới.</p>
+      </div>
+  </section>
 
 
     <script>

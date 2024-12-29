@@ -15,12 +15,20 @@ export default {
             fontFamily: {
                 sans: ['Roboto', ...defaultTheme.fontFamily.sans],
             },
+            colors:{
+                mainColor1:"#5271ff",
+                mainColor1_300: "rgba(82,113,255,0.4)",
+                mainColor1_600: "rgba(82,113,255,1.2)",
+                mainColor2:"#05e0e9",
+                mainColor2_300:"rgba(5,224,233,0.2)",
+            },
             // backgroundImage: {
             //     "bg-image-initial": "asset('images/image-background-web/blog_bg_ini.jpeg')"
             // },
             height:  {
                 '120': '48rem',
                 '100': '45.5rem',
+                '99' : '36rem',
                 '9/10': '90%'
             },
             maxWidth: {
@@ -31,7 +39,8 @@ export default {
                 '2000': '2000ms'
             },
             spacing:{
-                '120': '42rem'
+                '120': '42rem',
+                '110': '39rem'
             },
             animation:{
                 fade: "fade 2s",

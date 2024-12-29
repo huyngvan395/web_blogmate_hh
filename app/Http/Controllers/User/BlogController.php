@@ -27,4 +27,26 @@ class BlogController extends Controller
 
         return view('user.blog',compact('blogs','usersWithMostFollowers'));
     }
+
+    public function showBlogFollow()
+    {
+        $blogs = Blog::whereHas('user', function ($query) {
+            $query->whereHas('followers', function ($q) {
+                $q->where('follower_id', Auth::id());
+            });
+        })->get();
+
+        $usersWithMostFollowers = User::where('id','!=', Auth::user()->id)->where('role','!=','admin')
+            ->with(['followers'])
+            ->withCount('followers')
+            ->orderBy('followers_count', 'desc')
+            ->take(8)
+            ->get()
+            ->map(function ($user) {
+                $user->is_followed = Auth::user()->following->contains($user->id);
+                return $user;
+            });
+
+            return view('user.blog', compact('blogs', 'usersWithMostFollowers'));
+    }
 }

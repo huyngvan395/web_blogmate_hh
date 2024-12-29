@@ -8,7 +8,6 @@ use Livewire\Volt\Component;
 new #[Layout('layouts.guest')] class extends Component
 {
     public LoginForm $form;
-
     /**
      * Handle an incoming authentication request.
      */
@@ -56,7 +55,7 @@ new #[Layout('layouts.guest')] class extends Component
         <div class="block mt-4">
             <label for="remember" class="inline-flex items-center">
                 <input wire:model="form.remember" id="remember" type="checkbox"
-                    class="rounded border-gray-300 text-sky-500 shadow-sm focus:ring-sky-500" name="remember">
+                    class="rounded border-gray-300 text-mainColor1 shadow-sm focus:ring-mainColor1" name="remember">
                 <span class="ms-2 text-sm text-gray-600">{{ __('Ghi lại') }}</span>
             </label>
         </div>
@@ -66,7 +65,7 @@ new #[Layout('layouts.guest')] class extends Component
                 class="underline text-sm text-gray-600 mr-5 hover:text-gray-900 rounded-md focus:outline-none focus:ring-offset-2 "
                 wire:navigate>Chưa có tài khoản</a>
             @if (Route::has('password.request'))
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-mainColor1"
                 href="{{ route('password.request') }}" wire:navigate>
                 {{ __('Quên mật khẩu?') }}
             </a>

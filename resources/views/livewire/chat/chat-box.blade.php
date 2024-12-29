@@ -32,7 +32,7 @@
         $el.addEventListener('scroll', () => handleScroll());
     }">
         <div x-show="isLoading" class="w-full flex justify-center">
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-sky-500"
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-mainColor1"
                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                     stroke-width="4"></circle>
@@ -47,7 +47,7 @@
             @if($message['type'] == 'text')
                 @if($message['user_id'] != Auth::user()->id)
                 <div class="flex justify-start py-2 pl-5">
-                    <div class="w-full">
+                    <div class="flex flex-col items-start w-full">
                         <p class="max-w-9/10 md:max-w-65/100 p-2 rounded-md bg-gray-300">{{$message['content']}}</p>
                         <span class="text-sm text-gray-400">{{$message['formatted_time']}}</span>
                     </div>
@@ -55,7 +55,7 @@
                 @else
                 <div class="flex justify-end py-2 px-1">
                     <div class="flex flex-col items-end w-full">
-                        <p class="max-w-9/10 md:max-w-65/100 p-2 rounded-md text-white bg-sky-500">{{$message['content']}}
+                        <p class="max-w-9/10 md:max-w-65/100 p-2 rounded-md text-white bg-mainColor1">{{$message['content']}}
                         </p>
                         <span class="text-sm text-gray-400">{{$message['formatted_time']}}</span>
                     </div>
@@ -64,15 +64,15 @@
             @elseif($message['type'] == 'file')
                 @if($message['user_id'] != Auth::user()->id)
                 <div class="flex justify-start">
-                    <div class="flex justify-start px-2 items-center">
-                        <h1 class="text-lg text-gray-400">{{basename($message['content'])}}</h1>
+                    <div class="flex flex-col justify-start px-2 items-center">
+                        <h1 class="bg-amber-300 p-2 text-lg text-gray-400">{{basename($message['content'])}}</h1>
                         <span class="text-sm text-gray-400 pl-2">{{$message['formatted_time']}}</span>
                     </div>
                 </div>
                 @else
                 <div class="flex justify-end">
-                    <div class="flex justify-end px-2 items-center">
-                        <h1 class="text-lg text-gray-400">{{basename($message['content'])}}</h1>
+                    <div class="flex flex-col justify-end px-2 items-center">
+                        <h1 class="bg-amber-300 p-2 text-lg text-gray-400">{{basename($message['content'])}}</h1>
                         <span class="text-sm text-gray-400 pl-2">{{$message['formatted_time']}}</span>
                     </div>
                 </div>
@@ -105,19 +105,19 @@
     <div class="flex justify-center items-center">
         <div class="px-1 sm:px-3">
             <label class="block w-auto h-auto p-0 sm:p-2 rounded-md hover:bg-gray-200 hover:cursor-pointer">
-                <x-gmdi-attach-file-r class="w-8 h-8 text-sky-500" />
+                <x-gmdi-attach-file-r class="w-8 h-8 text-mainColor1" />
                 <input type="file" class="hidden" wire:model="file" />
             </label>
         </div>
         <div class="px-1 sm:px-3">
             <label class="block w-auto h-auto p-0 sm:p-2 rounded-md hover:bg-gray-200 hover:cursor-pointer">
-                <x-carbon-image class="w-8 h-8 text-sky-500" />
+                <x-carbon-image class="w-8 h-8 text-mainColor1" />
                 <input type="file" class="hidden" wire:model="image" />
             </label>
         </div>
         <form wire:submit='addMessage' class="flex items-center flex-grow px-3 mb-2">
             <textarea x-ref="textarea" wire:model='text'
-                class="flex-grow py-2 h- resize-none border-gray-300 focus:border-sky-500 focus:ring-sky-400 rounded-md shadow-sm overflow-hidden"
+                class="flex-grow py-2 h- resize-none border-gray-300 focus:border-mainColor1 focus:ring-mainColor1_300 rounded-md shadow-sm overflow-hidden"
                 placeholder="Nhập tin nhắn ở đây"
                 :style="'height:' + textareaHeight + 'px; max-height:' + maxHeight + 'px; '" @input="textareaHeight = $refs.textarea.scrollHeight > maxHeight ? maxHeight : $refs.textarea.scrollHeight;
                 if ($refs.textarea.value === '') {
@@ -135,7 +135,7 @@
               "></textarea>
             <button type='submit' x-ref='submitBtn' @click="textareaHeight=minHeight;$refs.textarea.value = '';"
                 class="flex border-none justify-center items-center p-2 rounded-md hover:bg-gray-200 hover:cursor-pointer">
-                <x-carbon-send-filled class="w-8 h-8 text-sky-500  " />
+                <x-carbon-send-filled class="w-8 h-8 text-mainColor1  " />
             </button>
         </form>
     </div>

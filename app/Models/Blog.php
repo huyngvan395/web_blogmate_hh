@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Laravel\Scout\Searchable;
 
 class Blog extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $fillable = [
         'title',
@@ -19,6 +20,14 @@ class Blog extends Model
     ];
 
     protected $appends = ['formatted_time'];
+
+    public function toSearchableArray()
+    {
+        return [
+            'title' => $this->title,
+            'content' => $this->content,
+        ];
+    }
 
     public function user()
     {
@@ -49,22 +58,6 @@ class Blog extends Model
         $created_at = Carbon::parse($this->created_at); 
         $now = Carbon::now();
 
-        if ($created_at->isToday()) {
-            $diffInMinutes = $created_at->diffInMinutes($now);
-            if ($diffInMinutes < 60) {
-                return $created_at->diffForHumans();
-            }
-
-            $diffInHours = $created_at->diffInHours($now);
-            if ($diffInHours < 24) {
-                return $diffInHours . ' giờ trước';
-            }
-        }
-
-        if ($created_at->isYesterday()) {
-            return 'Hôm qua lúc ' . $created_at->format('H:i');
-        }
-
-        return $created_at->format('d/m/Y H:i'); 
+        return $created_at->diffForHumans($now);
     }
 }

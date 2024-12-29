@@ -8,7 +8,7 @@
                         <x-text-input id="title" name="title" class="border-none text-3xl" x-model="title" placeholder="Tiêu đề"></x-text-input>
                     </div>
                     <div class="relative mt-4">
-                        <input type="text" x-model="search" placeholder="Tìm thể loại..." 
+                        <input type="text" x-model="search" name="category_name" placeholder="Tìm thể loại..." 
                             class="w-full border rounded-lg px-4 py-2" 
                             x-on:focus="dropdownOpen = true" x-on:click.outside="dropdownOpen = false">
                         <ul class="absolute left-0 mt-1 bg-white border rounded-lg shadow w-full z-10" x-show="dropdownOpen && search.length > 0">

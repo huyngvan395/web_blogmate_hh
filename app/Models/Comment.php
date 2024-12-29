@@ -51,23 +51,6 @@ class Comment extends Model
     public function getFormattedTimeAttribute()
     {
         $createdAt = $this->created_at;
-        // $diffInMinutes = Carbon::now()->diffInMinutes($createdAt);
-        // $diffInHours = Carbon::now()->diffInHours($createdAt);
-        // $diffInDays = Carbon::now()->diffInDays($createdAt);
-        // $diffInWeeks = Carbon::now()->diffInWeeks($createdAt);
-        // $diffInYears = Carbon::now()->diffInYears($createdAt);
-
-        // if ($diffInMinutes < 60) {
-        //     return $diffInMinutes . ' phút trước';
-        // } elseif ($diffInHours < 24) {
-        //     return $diffInHours . ' giờ trước';
-        // } elseif ($diffInDays < 7) {
-        //     return $diffInDays . ' ngày trước';
-        // } elseif ($diffInWeeks < 53) {
-        //     return $diffInWeeks . ' tuần trước';
-        // } else {
-        //     return $diffInYears . ' năm trước';
-        // }
         return $createdAt->diffForHumans(Carbon::now());
     }
 }

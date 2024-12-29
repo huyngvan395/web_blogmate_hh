@@ -9,12 +9,12 @@ class ReportController extends Controller
 {
     public function showBlogReport()
     {
-        return view('admin.')
+        return view('admin.blog_report');
     }
 
     public function showCommentReport()
     {
-
+        return view('admin.comment_report');
     }
 
     

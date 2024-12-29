@@ -52,6 +52,13 @@ class ManageBlogController extends Controller
         $blog=new Blog();
         $blog->title=$request->input('title');
         $blog->category_id = $request->input('category_id');
+        if($blog->category_id == null){
+            $category_name=$request->input('category_name');
+            $category=new Category();
+            $category->name=$category_name;
+            $category->save();
+            $blog->category_id=$category->id;
+        }
         $blog->content=$request->input('content');
         $blog->user_id=Auth::user()->id;
         $image_blog=$this->getFirstImgTag($request->input('content'));
@@ -95,8 +102,11 @@ class ManageBlogController extends Controller
         //
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        
+        $id=$request->input('id');
+        $blog=Blog::find($id);
+        $blog->delete();
+        return response()->json(['msg'=>$id, 'redirect' => route('blog')]);
     }
 }

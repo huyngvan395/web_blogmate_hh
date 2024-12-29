@@ -10,7 +10,7 @@
                         Nơi để đọc, chia sẻ kiến thức và trò chuyện với mọi người
                     </p>
                     <div class="translate-x-36 p-4">
-                        <button x-data @click="window.location.href='{{ route('blog') }}'" class="flex items-center justify-start p-4 text-2xl bg-sky-500 text-white rounded-lg hover:bg-sky-700">
+                        <button x-data @click="window.location.href='{{ route('blog') }}'" class="flex items-center justify-start p-4 text-2xl bg-mainColor1 text-white rounded-lg hover:bg-mainColor1_600">
                             Bắt đầu ngay
                         </button>
                     </div>

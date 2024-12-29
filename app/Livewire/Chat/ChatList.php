@@ -13,6 +13,7 @@ use Livewire\Attributes\On;
 class ChatList extends Component
 {
     public $conversation_list;
+    public $searchTerm="";
 
     public function mount()
     {
@@ -29,6 +30,29 @@ class ChatList extends Component
         $this->dispatch('openChatBox');
     }
 
+    public function updatedSearchTerm($value)
+    {
+        $this->fetchConversations();
+    }
+
+    private function fetchConversations()
+    {
+        if (empty($this->searchTerm)) {
+            $this->conversation_list = Conversation::where('sender_id', Auth::id())
+                ->orWhere('receiver_id', Auth::id())
+                ->with(['sender', 'receiver', 'latestMessage'])
+                ->get()->sortByDesc(function ($conversation) {
+                    return $conversation->latestMessage->created_at;
+                });;
+        } else {
+            $this->conversation_list = Conversation::search($this->searchTerm)
+                ->get()
+                ->filter(function ($conversation) {
+                    return $conversation->sender_id === Auth::id() || $conversation->receiver_id === Auth::id();
+                });
+        }
+    }
+
     #[On('updateChatList')]
     public function updateChatList()
     {
@@ -40,7 +64,7 @@ class ChatList extends Component
         ->get()
         ->sortByDesc(function ($conversation) {
             return $conversation->latestMessage->created_at;
-        });;
+        });
     }
 
     public function render()

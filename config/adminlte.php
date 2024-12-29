@@ -65,7 +65,7 @@ return [
 
     'logo' => '<b>Trang quản lí</b>',
     // 'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img' => 'images/logo/logo_blogmate.png',
+    'logo_img' => 'images/logo/BlogMate.webp',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -115,7 +115,7 @@ return [
         'mode' => 'fullscreen',
         'img' => [
             // 'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-            'path' => 'images/logo/logo_blogmate.png',
+            'path' => 'images/logo/BlogMate.webp',
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
@@ -364,7 +364,7 @@ return [
             'submenu' =>[
                 [
                     'text' => 'Tạo',
-                    'url' =>'#'
+                    'url' =>'admin/category/create'
                 ],
                 [
                     'text' => 'Danh sách',
@@ -372,20 +372,20 @@ return [
                 ]
             ]
         ],
-        [
-            'text' => 'Báo cáo',
-            'icon' => 'fas fa-flag',
-            'submenu' =>[
-                [
-                    'text' => 'Blog',
-                    'url' => 'admin/blog/report'
-                ],
-                [
-                    'text' => 'Bình luận',
-                    'url' =>'admin/comment/report'
-                ]
-            ]
-        ]
+        // [
+        //     'text' => 'Báo cáo',
+        //     'icon' => 'fas fa-flag',
+        //     'submenu' =>[
+        //         [
+        //             'text' => 'Blog',
+        //             'url' => 'admin/blog/report'
+        //         ],
+        //         [
+        //             'text' => 'Bình luận',
+        //             'url' =>'admin/comment/report'
+        //         ]
+        //     ]
+        // ]
         // [
         //     'text' => 'blog',
         //     'url' => 'admin/blog',

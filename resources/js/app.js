@@ -1,16 +1,83 @@
 import './bootstrap';
 import './attachment';
-// import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
-// import dataBlog from './alpine/dataBlog';
-// import followData from './alpine/followData';
-// import dataCreateBlog from './alpine/dataCreateBlog';
-// import dataChat from './alpine/dataChat';
+import axios from 'axios';
 
-// Alpine.data('dataBlog', dataBlog);
-// Alpine.data('followData', followData);
-// Alpine.data('dataCreateBlog', dataCreateBlog);
-// Alpine.data('dataChat', dataChat);
 document.addEventListener('alpine:init', ()=>{
+    Alpine.store('url',{
+        currentUrl: window.location.href,
+        updateCurrentUrl() {
+            this.currentUrl = window.location.href;
+        }
+    })
+    Alpine.data('dataNavigation', ()=>({
+        open: false,
+        openUser: false, 
+        showNotifications:false,
+        currentUrl: window.location.href,
+        notifications: [],
+        count_notification: 0,
+        count_message: 0,
+        query:'',
+        searchBlogResults: [],
+        searchUserResults: [],
+        debounceTimeout: null,
+        init(){
+            axios.get('/notifications',{
+            },{
+                headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')}
+            })
+            .then((response)=>{
+                if(response.data.notifications){
+                    console.log(response.data);
+                    this.notifications.push(...response.data.notifications);
+                    console.log(this.notifications);
+                }
+            })
+            console.log(this.currentUrl);
+            if(window.userID){
+                window.Echo.channel(`notifications.${window.userID}`)
+                .listen('NotificationEvent',(e)=>{
+                    console.log(e);
+                    this.notifications.unshift(e);
+                    this.count_notification+=1;
+                    console.log(this.count_notification);
+                })
+            }
+        },
+        search(){
+            if (this.query.length > 0) {
+                clearTimeout(this.debounceTimeout);
+    
+                this.debounceTimeout = setTimeout(() => {
+                    console.log(this.query);  
+                    axios.post('/search', {
+                        query: this.query
+                    }, {
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then((response) => {
+                        this.searchUserResults = response.data.user;
+                        this.searchBlogResults = response.data.blog;
+                    });
+                }, 500);  
+            }
+        }
+        // updateCurrentUrl() {
+        //     this.currentUrl=window.location.href;
+        // } 
+    }))
+    Alpine.data('dataBlog', () => ({
+        showMoreOptionAction: false,
+        currentUrl: window.location.href,
+        init(){
+            console.log(this.currentUrl);
+        }
+        // updateCurrentUrl(){
+        //     Alpine.store('url').updateCurrentUrl();
+        // }
+    }))
     Alpine.data('dataCreateBlog', (categories) => ({
         search:'',
         selectedCategory: null, 
@@ -77,9 +144,6 @@ document.addEventListener('alpine:init', ()=>{
             }
         },
     }))
-    Alpine.data('dataBlog', () => ({
-        showMoreOptionAction: false,
-    }))
     Alpine.data('followData', (initialFollow, userID) => ({
         followed: initialFollow,
         init(){
@@ -96,6 +160,47 @@ document.addEventListener('alpine:init', ()=>{
                 this.followed= response.data.followed;
             })
         }
+    }))
+    Alpine.data('dataInfoUser', (followed) => ({
+        showMoreOptionAction: false,
+        followed: followed ,
+        menuMoreOptionRef: null,
+        init(){
+            console.log(this.followed);
+        },
+        toggleMenu() {
+            this.showMoreOptionAction = !this.showMoreOptionAction;
+
+            if (this.showMoreOptionAction) {
+                this.$nextTick(() => {
+                    this.menuMoreOptionRef = this.$refs.menuMoreOption;
+                    document.addEventListener('click', this.handleClickOutside.bind(this));
+                });
+            } else {
+                document.removeEventListener('click', this.handleClickOutside);
+            }
+        },
+        follow(user_id){
+            axios.post('/follow',{
+                author_id: user_id
+            },{
+                headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')}
+            })
+            .then((response)=>{
+                console.log(response.data.msg);
+                this.followed= response.data.followed;
+            })
+        },
+        handleClickOutside(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (this.menuMoreOptionRef && !this.menuMoreOptionRef.contains(event.target)) {
+                console.log("Thành công");
+                this.showMoreOptionAction = false;
+                document.removeEventListener('click', this.handleClickOutside);
+            }
+        },
+        
     }))
 })
     

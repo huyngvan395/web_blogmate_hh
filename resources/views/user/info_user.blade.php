@@ -3,8 +3,8 @@ use Illuminate\Support\Facades\Crypt;
 @endphp
 <x-app-layout>
     <x-slot name="slot">
-        <div x-data="dataInfoUser">
-            <div class="mx-1 sm:mx-5 lg:mx-20 xl:mx-36 mt-20 flex flex-col md:flex-row">
+        <div x-data="dataInfoUser({{ $user->followers->contains(Auth::user()->id) ? 'true' : 'false'}})">
+            <div class="mx-1 sm:mx-5 lg:mx-20 xl:mx-36 mt-24 flex flex-col md:flex-row">
                 {{-- main --}}
                 <main class="flex flex-col gap-4 w-full md:w-7/12 md:pr-14 order-2 md:order-1">
                     <div class="flex items-center">
@@ -19,17 +19,17 @@ use Illuminate\Support\Facades\Crypt;
                     </div>
                     <ul class="flex gap-4 border-b border-gray-300 ">
                         <li class="block py-3 border-b border-black"><button id="for-you"
-                                class="block box-content text-base hover:text-black">Trang chính</button></li>
-                        <li class="block py-3"><button id="following"
+                                class="block box-content text-base hover:text-black">Blog</button></li>
+                        {{-- <li class="block py-3"><button id="following"
                                 class="block box-content text-gray-500 text-base hover:text-black">Về tôi</button>
-                        </li>
+                        </li> --}}
                     </ul>
                     {{-- blog-contain --}}
-                    <div class="flex flex-col">
+                    <div class="flex flex-col overflow-y-scroll h-99">
                         @if(! $user->blog->isEmpty())
                             @foreach($user->blog as $blog)
                             {{-- blog-item --}}
-                            <div @click="directToBlogDetail($event)" data-id="{{Crypt::encryptString($blog->id)}}"
+                            <div onclick="directToBlogDetail(this)" data-id="{{Crypt::encryptString($blog->id)}}"
                                 class="block box-border pt-5 hover:cursor-pointer relative"
                                 x-data="{showMoreOptionAction: false}">
                                 <div class="flex flex-col">
@@ -53,61 +53,63 @@ use Illuminate\Support\Facades\Crypt;
                                     {{-- blog-info --}}
                                     <div class="flex ">
                                         <div class="flex flex-col w-full border-b border-gray-300">
-                                            <div class="flex">
+                                            <div class="flex p-2">
                                                 <div class="md:w-2/3 w-7/12">
-                                                    <h1
-                                                        class="text-xl md:text-3xl leading-10 font-bold line-clamp-2 hover:underline">
+                                                    <h1 class="text-xl md:text-2xl leading-10 font-bold line-clamp-3 ">
                                                         {{$blog->title}}</h1>
+                                                        <div class="flex p-2">
+                                                            <div class="pt-2 flex w-full">
+                                                                {{-- hearts --}}
+                                                                <div class="flex justify-center items-center">
+                                                                    <button class="flex text-gray-500">
+                                                                        <x-heroicon-s-heart class="fill-current w-5 h-5 " />
+                                                                        {{$blog->usersWhoHearts->count()}}
+                                                                    </button>
+                                                                </div>
+                                                                {{-- comments --}}
+                                                                <div class="flex px-4">
+                                                                    <button name="comment" id="comment"
+                                                                        class="flex text-gray-500 justify-center items-center ">
+                                                                        <x-gmdi-mode-comment-s class="fill-current w-5 h-5" />
+                                                                        {{$blog->comment->count()}}
+                                                                    </button>
+                                                                </div>
+                                                                {{-- more-option --}}
+                                                                @if($user->id==Auth::user()->id)
+                                                                    <div class="flex justify-end items-center flex-grow pr-3 relative">
+                                                                        <button
+                                                                            @click="e => {e.stopPropagation(); toggleMenu()}"
+                                                                            class="hover:bg-gray-200 p-2 rounded-md">
+                                                                            <x-bi-three-dots
+                                                                                class="text-gray-500 w-5 h-5  hover:text-gray-800" />
+                                                                        </button>
+                                                                        {{-- more-option-action --}}
+                                                                        <div x-cloak x-show="showMoreOptionAction" x-ref="menuMoreOption" class="absolute right-0 -bottom-10 rounded-md bg-white shadow-lg z-50">
+                                                                            <div @click="e=>{e.stopPropagation()}" class="flex justify-center items-center hover:cursor-pointer hover:bg-gray-100 p-2">
+                                                                                <x-heroicon-s-trash class="w-4 h-4 text-red-500"/>
+                                                                                <p class="text-red-500">Xóa bài viết</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
                                                 </div>
                                                 {{-- image-blog --}}
-                                                <div class="flex items-end justify-start pl-10 md:w-1/3 w-5/12">
+                                                <div class="flex items-start justify-start pl-10 md:w-1/3 w-5/12">
+                                                    @if(!empty($blog->image_blog))
                                                     <div class="flex justify-end items-start w-full"><img
-                                                            src="{{$blog->image_blog}}"
-                                                            class="w-32 h-16 md:h-28 md:w-40 rounded-md" alt="">
+                                                        src="{{$blog->image_blog}}"
+                                                        class="w-32 h-16 md:h-28 md:w-40 rounded-md" alt="">
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="flex p-4">
-                                                <div class="pt-2 flex w-full">
-                                                    {{-- hearts --}}
-                                                    <div class="flex justify-center items-center pl-2">
-                                                        <button class="flex text-gray-500">
-                                                            <x-heroicon-s-heart class="fill-current w-5 h-5 " />
-                                                            {{$blog->usersWhoHearts->count()}}
-                                                        </button>
-                                                    </div>
-                                                    {{-- comments --}}
-                                                    <div class="flex px-4">
-                                                        <button name="comment" id="comment"
-                                                            class="flex text-gray-500 justify-center items-center ">
-                                                            <x-gmdi-mode-comment-s class="fill-current w-5 h-5" />
-                                                            {{$blog->comment->count()}}
-                                                        </button>
-                                                    </div>
-                                                    {{-- more-option --}}
-                                                    @if($user->id==Auth::user()->id)
-                                                        <div class="flex justify-end items-center flex-grow pr-3">
-                                                            <button
-                                                                @click="e => {e.stopPropagation(); toggleMenu()}"
-                                                                class="hover:bg-gray-200 p-2 rounded-md">
-                                                                <x-bi-three-dots
-                                                                    class="text-gray-500 w-5 h-5  hover:text-gray-800" />
-                                                            </button>
-                                                        </div>
                                                     @endif
                                                 </div>
                                             </div>
+                                            
     
                                         </div>
     
                                     </div>
-                                </div>
-                                {{-- more-option-action --}}
-                                <div x-show="showMoreOptionAction" x-ref="menuMoreOption" class="absolute right-0 -bottom-5 rounded-md bg-white shadow-lg z-50">
-                                    <button @click="e=>{e.stopPropagation()}"
-                                        class="text-red-600 hover:bg-gray-200 p-2 rounded-md">
-                                        Delete
-                                    </button>
                                 </div>
                             </div>
                             @endforeach
@@ -138,26 +140,29 @@ use Illuminate\Support\Facades\Crypt;
                                 </div>
                                 {{-- quantity followers --}}
                                 <div class="flex items-center">
-                                    <a href=""
-                                        class="text-gray-500 text-base md:text-lg hover:text-black hover:cursor-pointer truncate ...">500
-                                        người theo
-                                        dõi</a>
+                                    <a href="{{route('user.info.follower',['infoUser'=> Str::before($user->email, '@')])}}" class="text-gray-500 text-base md:text-lg hover:text-black hover:cursor-pointer truncate ...">
+                                        {{$user->followers->count()}} người theo dõi</a>
+                                </div>
+                                {{-- quantity following --}}
+                                <div class="flex items-center">
+                                    <a href="{{route('user.info.following',['infoUser'=> Str::before($user->email, '@')])}}" class="text-gray-500 text-base md:text-lg hover:text-black hover:cursor-pointer truncate ...">
+                                        {{$user->following->count()}} đang theo dõi</a>
                                 </div>
                             </div>
                         </div>
                         {{-- contact with user --}}
                         <div class="flex items-center gap-2">
                             @if($user->id!=Auth::user()->id)
-                            <button x-show="!followed" @click="follow()"
-                                class="flex flex-grow sm:flex-grow-0 justify-center items-center text-sm md:text-base bg-sky-500 rounded-3xl p-2 text-nowrap text-white">
+                            <button x-show="!followed" @click="follow({{$user->id}})"
+                                class="flex flex-grow sm:flex-grow-0 justify-center items-center text-sm md:text-base bg-mainColor1 rounded-3xl p-2 text-nowrap text-white">
                                 Theo dõi
                             </button>
-                            <button x-show="followed" @click="follow()"
-                                class="flex flex-grow sm:flex-grow-0 justify-center items-center border text-sm md:text-base border-sky-500 rounded-3xl p-2 text-sky-500">
+                            <button x-show="followed" @click="follow({{$user->id}})"
+                                class="flex flex-grow sm:flex-grow-0 justify-center items-center border text-sm md:text-base border-mainColor1 rounded-3xl p-2 text-mainColor1">
                                 Đã theo dõi
                             </button>
                             <a href="" @click="e=>{e.preventDefault();document.getElementById('submit').click()}"
-                                class="flex flex-grow sm:flex-grow-0 justify-center items-center text-sm md:text-base bg-sky-500 text-white rounded-3xl p-2 text-nowrap">
+                                class="flex flex-grow sm:flex-grow-0 justify-center items-center text-sm md:text-base bg-mainColor1 text-white rounded-3xl p-2 text-nowrap">
                                 <x-carbon-chat class="w-3 h-3 md:w-6 md:h-6 pr-1" />Nhắn tin
                             </a>
                             <form id="chat-form" action="{{route('chat')}}" method="post">
@@ -167,7 +172,7 @@ use Illuminate\Support\Facades\Crypt;
                             </form>
                             @else
                             <a href="{{route('profile')}}"
-                                class="flex flex-grow sm:flex-grow-0 justify-center items-center text-sm md:text-base text-sky-500 rounded-3xl p-2 text-nowrap">
+                                class="flex flex-grow sm:flex-grow-0 justify-center items-center text-sm md:text-base text-mainColor1 rounded-3xl p-2 text-nowrap">
                                 Quản lí tài khoản
                             </a>
                             @endif
@@ -180,61 +185,10 @@ use Illuminate\Support\Facades\Crypt;
             </div>
         </div>
         <script>
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('dataInfoUser', () => ({
-                    showMoreOptionAction: false,
-                    followed: {{ $user->followers->contains(Auth::user()->id) ? 'true' : 'false'}} ,
-                    menuMoreOptionRef: null,
-                    init(){
-                        console.log(this.followed);
-                    },
-                    toggleMenu() {
-                        this.showMoreOptionAction = !this.showMoreOptionAction;
-
-                        if (this.showMoreOptionAction) {
-                            this.$nextTick(() => {
-                                this.menuMoreOptionRef = this.$refs.menuMoreOption;
-                                console.log(this.menuMoreOptionRef);
-                                document.addEventListener('click', this.handleClickOutside.bind(this));
-                            });
-                        } else {
-                            document.removeEventListener('click', this.handleClickOutside);
-                        }
-                    },
-                    follow(){
-                        axios.post('/follow',{
-                            author_id: "{{$user->id}}"
-                        },{
-                            headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')}
-                        })
-                        .then((response)=>{
-                            console.log(response.data.msg);
-                            this.followed= response.data.followed;
-                        })
-                    },
-                    handleClickOutside(event) {
-                        console.log(this.menuMoreOptionRef);
-                        event.preventDefault();
-                        event.stopPropagation();
-                        console.log(event.target);
-                        if (this.menuMoreOptionRef && !this.menuMoreOptionRef.contains(event.target)) {
-                            console.log("Thành công");
-                            this.showMoreOptionAction = false;
-                            document.removeEventListener('click', this.handleClickOutside);
-                        }
-                    },
-                    directToBlogDetail(event){
-                        if(this.showMoreOptionAction){
-                            return;
-                        }else{
-                            const hash_id= event.currentTarget.getAttribute('data-id'); 
-                            window.location.href=`{{route('blog.blog-detail', ['id'=> '__ID__'])}}`.replace('__ID__', hash_id);
-                        }
-                    }
-                }))
-            })
-            const userTargetID = document.querySelector('input[name="userTargetID"]').value;
-            console.log('userTargetID:', userTargetID);
+            function directToBlogDetail(element){
+                const hash_id= element.getAttribute('data-id'); 
+                window.location.href=`{{route('blog.blog-detail', ['id'=> '__ID__'])}}`.replace('__ID__', hash_id);
+            }
         </script>
     </x-slot>
 </x-app-layout>
